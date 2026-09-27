@@ -101,7 +101,46 @@ public class SinglyLinkedList<E extends Comparable<E>> {
 
     // write your codes here
     public void swap(){
-        
+        if (size <= 1) {
+        return;
+    }
+
+    ArrayList<Node<E>> originalList = new ArrayList<>();
+    ArrayList<Node<E>> sortedList = new ArrayList<>();
+
+    Node<E> current = head;
+
+    while (current != null) {
+        originalList.add(current);
+        sortedList.add(current);
+        current = current.getNext();
+    }
+
+    sortedList.sort((a, b) ->
+        a.getElement().compareTo(b.getElement())
+    );
+
+    HashMap<Node<E>, Node<E>> nodePairingMap = new HashMap<>();
+
+    for (int i = 0; i < sortedList.size(); i++) {
+        nodePairingMap.put(sortedList.get(i), sortedList.get(sortedList.size() - 1 - i));
+    }
+
+    // Build the new sequence based on the original positions
+    ArrayList<Node<E>> result = new ArrayList<>();
+
+    for (Node<E> node : originalList) {
+        result.add(nodePairingMap.get(node));
+    }
+
+    for (int i = 0; i < result.size() - 1; i++) {
+        result.get(i).setNext(result.get(i + 1));
+    }
+
+    result.get(result.size() - 1).setNext(null);
+
+    head = result.get(0);
+    tail = result.get(result.size() - 1);
 
     }
    
